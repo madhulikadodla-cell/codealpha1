@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#102d2b">
+  <title>DataGuard | Integrity Console</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+  <link href="/css/styles.css" rel="stylesheet">
+</head>
+<body>
+  <main id="auth-view" class="auth-layout">
+    <section class="auth-aside" aria-label="Product overview">
+      <a class="brand brand-light" href="/" aria-label="DataGuard home"><span class="brand-mark"><i class="bi bi-shield-check"></i></span><span>DATA<span class="brand-accent">GUARD</span></span></a>
+      <div class="auth-aside-copy">
+        <p class="eyebrow eyebrow-light">DATA INTEGRITY CONSOLE</p>
+        <h1>Keep the signal.<br><span>Lose the duplicates.</span></h1>
+        <p>One trusted record at a time. Validate incoming data, catch repeats, and keep your database clean.</p>
+      </div>
+      <div class="auth-foot"><span class="status-dot"></span> Secure workspace <span class="auth-foot-divider">/</span> Session protected</div>
+    </section>
+    <section class="auth-panel">
+      <div class="auth-mobile-brand brand"><span class="brand-mark"><i class="bi bi-shield-check"></i></span><span>DATA<span class="brand-accent">GUARD</span></span></div>
+      <div class="auth-card">
+        <p class="eyebrow">WELCOME</p>
+        <h2 id="auth-heading">Sign in to your workspace</h2>
+        <p class="auth-subtitle">Use your account credentials to continue.</p>
+        <div class="auth-tabs" role="tablist" aria-label="Account access">
+          <button class="auth-tab active" id="login-tab" type="button" role="tab" aria-selected="true">Sign in</button>
+          <button class="auth-tab" id="register-tab" type="button" role="tab" aria-selected="false">Create account</button>
+        </div>
+        <div id="auth-message" class="alert d-none" role="alert"></div>
+        <form id="login-form" novalidate>
+          <label class="form-label" for="login-username">Username</label>
+          <input class="form-control" id="login-username" name="username" autocomplete="username" required maxlength="50">
+          <label class="form-label mt-3" for="login-password">Password</label>
+          <input class="form-control" id="login-password" name="password" type="password" autocomplete="current-password" required>
+          <button class="btn btn-primary w-100 auth-submit" type="submit">Sign in <i class="bi bi-arrow-right-short"></i></button>
+        </form>
+        <form id="register-form" class="d-none" novalidate>
+          <label class="form-label" for="register-username">Username</label>
+          <input class="form-control" id="register-username" name="username" autocomplete="username" minlength="3" maxlength="50" pattern="[A-Za-z0-9._\\x2d]+" required>
+          <div class="form-hint">3-50 letters, numbers, dots, underscores or hyphens.</div>
+          <label class="form-label mt-3" for="register-password">Password</label>
+          <input class="form-control" id="register-password" name="password" type="password" autocomplete="new-password" minlength="10" maxlength="72" required>
+          <div class="form-hint">At least 10 characters.</div>
+          <button class="btn btn-primary w-100 auth-submit" type="submit">Create account <i class="bi bi-arrow-right-short"></i></button>
+        </form>
+        <div class="auth-note"><i class="bi bi-lock"></i><span>Passwords are encrypted before they are stored.</span></div>
+      </div>
+      <p class="auth-copyright">DataGuard <span id="current-year"></span> · Built for reliable data operations</p>
+    </section>
+  </main>
+
+  <div id="app-view" class="d-none">
+    <aside class="sidebar" id="sidebar">
+      <a class="brand brand-light sidebar-brand" href="#overview"><span class="brand-mark"><i class="bi bi-shield-check"></i></span><span>DATA<span class="brand-accent">GUARD</span></span></a>
+      <div class="sidebar-label">WORKSPACE</div>
+      <nav class="sidebar-nav" aria-label="Main navigation">
+        <a class="sidebar-link active" href="#overview" data-nav="overview"><i class="bi bi-grid-1x2"></i><span>Overview</span></a>
+        <a class="sidebar-link" href="#records" data-nav="records"><i class="bi bi-database"></i><span>Data records</span><span class="nav-count" id="nav-record-count">0</span></a>
+        <a class="sidebar-link admin-only" href="#duplicates" data-nav="duplicates"><i class="bi bi-intersect"></i><span>Duplicate log</span><span class="nav-count nav-count-warm" id="nav-duplicate-count">0</span></a>
+      </nav>
+      <div class="sidebar-bottom">
+        <div class="sidebar-status"><span class="status-dot"></span><span><strong>System healthy</strong><small>Validation active</small></span></div>
+        <button id="logout-button" class="sidebar-logout"><i class="bi bi-box-arrow-left"></i> Sign out</button>
+      </div>
+    </aside>
+
+    <div class="main-shell">
+      <header class="topbar">
+        <button id="mobile-menu" class="icon-button mobile-menu" type="button" aria-label="Open menu"><i class="bi bi-list"></i></button>
+        <div class="breadcrumb-label"><span>WORKSPACE</span><i class="bi bi-chevron-right"></i><strong id="topbar-section">Overview</strong></div>
+        <div class="topbar-right"><span class="secure-indicator"><i class="bi bi-shield-lock"></i> Protected session</span><div class="user-chip"><span class="avatar" id="user-avatar">U</span><span id="user-name">User</span><span id="user-role" class="role-badge">USER</span></div><button id="topbar-logout" class="icon-button user-logout d-none" type="button" title="Sign out" aria-label="Sign out"><i class="bi bi-box-arrow-right"></i></button></div>
+      </header>
+
+      <main class="page-content">
+        <div id="user-portal" class="d-none"></div>
+        <div id="admin-dashboard" class="d-none">
+          <section class="page-heading">
+            <div><p class="eyebrow">MONITORING</p><h1>Integrity overview</h1><p class="page-description">Your data, checked and accounted for.</p></div>
+            <div class="heading-actions"><button id="export-report" class="btn btn-outline-dark"><i class="bi bi-download"></i><span>Export report</span></button><button id="add-record" class="btn btn-primary"><i class="bi bi-plus-lg"></i><span>Add record</span></button></div>
+          </section>
+
+          <section class="metric-grid" aria-label="Data statistics">
+            <article class="metric-card metric-ink"><div class="metric-top"><span>Total records</span><span class="metric-icon"><i class="bi bi-database"></i></span></div><div class="metric-value" id="total-records">0</div><div class="metric-foot"><span class="metric-dot"></span>Verified entries stored</div></article>
+            <article class="metric-card"><div class="metric-top"><span>Unique records</span><span class="metric-icon metric-icon-green"><i class="bi bi-check2-circle"></i></span></div><div class="metric-value" id="unique-records">0</div><div class="metric-foot"><span class="metric-dot green"></span>Passed validation</div></article>
+            <article class="metric-card"><div class="metric-top"><span>Duplicate attempts</span><span class="metric-icon metric-icon-orange"><i class="bi bi-intersect"></i></span></div><div class="metric-value" id="duplicate-count">0</div><div class="metric-foot"><span class="metric-dot orange"></span>Blocked before saving</div></article>
+            <article class="metric-card metric-clean"><div class="metric-top"><span>Integrity rate</span><span class="metric-icon metric-icon-blue"><i class="bi bi-activity"></i></span></div><div class="metric-value" id="integrity-rate">100<span class="metric-suffix">%</span></div><div class="metric-foot"><span class="metric-dot blue"></span>Unique data retained</div></article>
+          </section>
+
+          <section class="analytics-grid">
+            <article class="panel chart-panel"><div class="panel-heading"><div><h2>Records by category</h2><p>Distribution of verified data</p></div><span class="panel-icon"><i class="bi bi-pie-chart"></i></span></div><div class="chart-wrap"><canvas id="category-chart" aria-label="Records by category chart"></canvas><div id="chart-empty" class="chart-empty d-none">Add a record to see category distribution.</div></div></article>
+            <article class="panel activity-panel"><div class="panel-heading"><div><h2>Recent duplicate activity</h2><p>Attempts stopped by validation</p></div><a href="#duplicates" class="text-link admin-only" data-nav="duplicates">View log <i class="bi bi-arrow-up-right"></i></a></div><div id="recent-activity" class="activity-list"></div></article>
+          </section>
+
+          <section id="record-section" class="panel data-panel">
+            <div class="panel-heading data-heading"><div><p class="eyebrow">DATABASE</p><h2>Data management</h2><p>Search, review, and maintain verified records.</p></div><div class="data-tools"><label class="search-box"><i class="bi bi-search"></i><input id="record-search" type="search" placeholder="Search ID, name or email" aria-label="Search records"></label><select id="category-filter" class="form-select category-filter" aria-label="Filter by category"><option value="">All categories</option></select></div></div>
+            <div class="table-responsive"><table class="table data-table"><thead><tr><th>RECORD</th><th>CATEGORY</th><th>DETAILS</th><th>ADDED BY</th><th>DATE ADDED</th><th class="admin-only">ACTIONS</th></tr></thead><tbody id="records-body"></tbody></table><div id="records-empty" class="empty-state d-none"><span class="empty-icon"><i class="bi bi-inbox"></i></span><strong>No records found</strong><span>Try a different search or add your first data record.</span></div></div>
+            <div class="table-footer"><span id="record-summary">Showing 0 records</span><span><i class="bi bi-shield-check"></i> Duplicate validation is on</span></div>
+          </section>
+
+          <section id="duplicate-section" class="panel data-panel d-none">
+            <div class="panel-heading data-heading"><div><p class="eyebrow">AUDIT TRAIL</p><h2>Duplicate attempts</h2><p>Submissions rejected before they reached the database.</p></div><button id="export-report-secondary" class="btn btn-outline-dark"><i class="bi bi-download"></i> Export CSV</button></div>
+            <div class="table-responsive"><table class="table data-table"><thead><tr><th>ATTEMPT ID</th><th>SUBMITTED ID</th><th>SUBMITTED BY</th><th>MATCH TYPE</th><th>MATCHED RECORD</th><th>TIME</th></tr></thead><tbody id="duplicates-body"></tbody></table><div id="duplicates-empty" class="empty-state d-none"><span class="empty-icon"><i class="bi bi-check2-circle"></i></span><strong>No duplicate attempts</strong><span>New submissions are checked automatically.</span></div></div>
+            <div class="table-footer"><span id="duplicate-summary">0 attempts</span><span><i class="bi bi-shield-check"></i> Rejected data is never saved as a record</span></div>
+          </section>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <div class="modal fade" id="record-modal" tabindex="-1" aria-labelledby="record-modal-title" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered"><div class="modal-content">
+      <form id="record-form" novalidate>
+        <div class="modal-header"><div><p class="eyebrow">VALIDATED ENTRY</p><h2 class="modal-title" id="record-modal-title">Add data record</h2></div><button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button></div>
+        <div class="modal-body"><div id="record-message" class="alert d-none" role="alert"></div>
+          <div class="row g-3"><div class="col-md-6"><label class="form-label" for="record-external-id">Unique ID <span class="required-mark">*</span></label><input id="record-external-id" class="form-control" maxlength="80" required placeholder="e.g. CUST-1048"></div>
+            <div class="col-md-6"><label class="form-label" for="record-category">Category <span class="required-mark">*</span></label><input id="record-category" class="form-control" maxlength="60" required placeholder="e.g. Customer"></div>
+            <div class="col-md-6"><label class="form-label" for="record-name">Full name <span class="required-mark">*</span></label><input id="record-name" class="form-control" maxlength="120" required></div>
+            <div class="col-md-6"><label class="form-label" for="record-email">Email</label><input id="record-email" class="form-control" type="email" maxlength="160" placeholder="name@example.com"></div>
+            <div class="col-12"><label class="form-label" for="record-details">Record details <span class="required-mark">*</span></label><textarea id="record-details" class="form-control" rows="3" maxlength="500" required placeholder="Add a short note or data description"></textarea><div class="field-counter"><span>Included in duplicate comparison</span><span id="details-count">0 / 500</span></div></div>
+          </div>
+          <p class="validation-note"><i class="bi bi-shield-check"></i> ID and record content are checked before anything is saved.</p>
+        </div>
+        <div class="modal-footer"><button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancel</button><button id="save-record" type="submit" class="btn btn-primary"><i class="bi bi-check2"></i> Validate and save</button></div>
+      </form>
+    </div></div>
+  </div>
+  <div class="toast-container position-fixed bottom-0 end-0 p-3"><div id="app-toast" class="toast" role="status" aria-live="polite" aria-atomic="true"><div class="toast-body"><i class="bi bi-check-circle-fill"></i><span id="toast-message"></span><button type="button" class="btn-close ms-auto" data-bs-dismiss="toast" aria-label="Close"></button></div></div></div>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+  <script src="/js/app.js"></script>
+</body>
+</html>
